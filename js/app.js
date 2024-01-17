@@ -34,7 +34,6 @@ function newObj(obj, liText) {
     console.log(obj)
 }
 
-
 input.addEventListener('keypress', function (event) {
     const obj = new Object();
 
@@ -58,7 +57,6 @@ function itemget(obj) {
     itemsFromStor.push(obj);
     localStorage.setItem('todos', JSON.stringify(itemsFromStor));
 }
-
 
 function newtask(obj) {
     let task = document.createElement("li");
@@ -88,7 +86,6 @@ function newtask(obj) {
         task.classList.add('completed');
         clearCompleted.style.display = 'block';
     }
-
 
     let delButton = document.querySelectorAll(".destroy");
     let alldelButton = Array.from(delButton);
@@ -147,29 +144,33 @@ function newtask(obj) {
     });     
     });
 
-
     filters.addEventListener('click', (event) => {
         let parentAdd = event.target.parentElement;
         let select = parentAdd.querySelector(".filters li a");
         let href = select.href;
         const hrefName = event.target.hasAttribute('href');
+        let aclas = document.querySelectorAll(".filters li a");
+        let acsarr = Array.from(aclas);
 
         if (hrefName === true) {
+            acsarr.forEach((ele) => { 
+                ele.classList.remove('selected');
+                if (event.target.classList.contains('selected') === false) {
+                     ele.classList.add('selected');
+                 }
+            })
+
             if (href.includes("#/active")) {
-                select.classList.toggle('selected');
                 return active();
             } else
                 if (href.includes("#/completed")) {
-                    select.classList.toggle('selected');
                     return complited()
                 }
                 else
                     if (href.includes("#/")) {
-                        // console.log("all")
-                        select.classList.toggle('selected');
                         task.style.display = 'block';
                         countItems();
-                    }
+                    } 
         }
     })
 
@@ -195,8 +196,6 @@ function newtask(obj) {
                 }
         })
     }
-
-   
 
     clearCompl();
     input.value = '';
