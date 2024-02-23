@@ -1,4 +1,10 @@
 
+window.onload = function () { 
+//     localStorage.setItem('todos', JSON.stringify(itemsFromStor));
+    
+//     countItems();
+//     // newtask();
+
 const itemsFromStor = localStorage.getItem('todos') ?
     JSON.parse(window.localStorage.getItem('todos')) : [];
 
@@ -48,6 +54,7 @@ input.addEventListener('keypress', function (event) {
             newObj(obj, liText);
             itemget(obj);
             newtask(obj);
+            countItems();
         }
     }
     return obj
@@ -103,9 +110,7 @@ function newtask(obj) {
                 btnelem2.remove(task);
                 itemsFromStor.splice([ind], 1);
                 localStorage.setItem('todos', JSON.stringify(itemsFromStor));
-                // console.log(itemsFromStor);
-                let count = itemsFromStor.length;
-                todo_count.textContent = `${count} items left`;
+                countItems();
             }
         })
     })
@@ -151,7 +156,6 @@ function newtask(obj) {
         const hrefName = event.target.hasAttribute('href');
         let aclas = document.querySelectorAll(".filters li a");
         let acsarr = Array.from(aclas);
-
         if (hrefName === true) {
             acsarr.forEach((ele) => { 
                 ele.classList.remove('selected');
@@ -159,20 +163,60 @@ function newtask(obj) {
                      ele.classList.add('selected');
                  }
             })
-
             if (href.includes("#/active")) {
                 return active();
             } else
                 if (href.includes("#/completed")) {
+                    localStorage.setItem('todos', JSON.stringify(itemsFromStor));
                     return complited()
                 }
                 else
                     if (href.includes("#/")) {
                         task.style.display = 'block';
                         countItems();
-                    } 
+                        localStorage.setItem('todos', JSON.stringify(itemsFromStor));
+                        } 
+            
         }
     })
+
+        let whref = window.location.href;
+    let afilters = document.querySelectorAll(".filters li a");
+    let allafil = Array.from(afilters);
+ 
+    if (whref.includes("#/active")) {
+        allafil.forEach((elemen) => {
+            let buthref = elemen.href;
+            elemen.classList.remove('selected');
+            if (elemen.classList.contains('selected') === false && buthref.includes("#/active")) {
+                elemen.classList.add('selected');
+            }
+        })
+                    itemsFromStor.forEach((ele) => {
+                    if (ele.completed === false && ele.id === +task.dataset.name) {
+                        task.style.display = 'block';
+                        countItems();
+                    } else
+                        if (ele.completed === true && ele.id === +task.dataset.name) {
+                            task.style.display = 'none';
+                        }
+                })
+        }
+    
+  
+    if (whref.includes("#/completed")) {
+        allafil.forEach((elemen) => {
+            let buthref = elemen.href;
+            elemen.classList.remove('selected');
+            if (elemen.classList.contains('selected') === false && buthref.includes("#/completed")) {
+                elemen.classList.add('selected');
+            }
+        })
+            complited();
+        }
+    
+    
+
 
     function active() {
         itemsFromStor.forEach((ele) => {
@@ -184,6 +228,7 @@ function newtask(obj) {
                     task.style.display = 'none';
                 }
         })
+        localStorage.setItem('todos', JSON.stringify(itemsFromStor));
     }
 
     function complited() {
@@ -195,6 +240,7 @@ function newtask(obj) {
                     task.style.display = 'none';
                 }
         })
+        localStorage.setItem('todos', JSON.stringify(itemsFromStor));
     }
 
     clearCompl();
@@ -247,7 +293,8 @@ function clearCompl() {
         todo_count.textContent = `${count} items left`;
         clearCompleted.style.display = 'none';
     })
-}
+    }
+
 
 function countItems() {
     let i = 0
@@ -260,8 +307,8 @@ function countItems() {
     todo_count.textContent = `${count} items left`;
 }
 
-
-
+    countItems();
+}
 
 
 
